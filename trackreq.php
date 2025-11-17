@@ -506,7 +506,8 @@ function statusColor($status) {
         <div class="filter-tabs">
           <button class="tab active" data-filter="all">all</button>
           <button class="tab" data-filter="pending">pending</button>
-          <button class="tab" data-filter="ongoing">ongoing</button>
+          <button class="tab" data-filter="ongoing">in progress</button>
+          <button class="tab" data-filter="submitted">ready</button>
           <button class="tab" data-filter="completed">completed</button>
         </div>
       </div>
@@ -617,33 +618,46 @@ function statusColor($status) {
   
   <script>
     // Filter functionality
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        // Update active state
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        
-        const filter = tab.dataset.filter;
-        const cards = document.querySelectorAll('.request-card');
-        
-        cards.forEach(card => {
-          const status = card.dataset.status.toLowerCase();
-          let show = false;
-          
-          if (filter === 'all') {
-            show = true;
-          } else if (filter === 'pending') {
-            show = status === 'submitted' || status === 'under review';
-          } else if (filter === 'ongoing') {
-            show = status === 'in progress';
-          } else if (filter === 'completed') {
-            show = status === 'completed';
-          }
-          
-          card.style.display = show ? 'block' : 'none';
-        });
-      });
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    // Update active state
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    
+    const filter = tab.dataset.filter;
+    const cards = document.querySelectorAll('.request-card');
+    const noRequestsMsg = document.querySelector('.no-requests');
+    let visibleCount = 0;
+    
+    cards.forEach(card => {
+      const status = card.dataset.status.toLowerCase().trim();
+      let show = false;
+      
+      if (filter === 'all') {
+        show = true;
+      } else if (filter === 'pending') {
+        // For "pending" tab - show both PENDING and UNDER REVIEW statuses
+        show = status === 'pending' || status === 'under review';
+      } else if (filter === 'ongoing') {
+        // For "in progress" tab
+        show = status === 'in progress';
+      } else if (filter === 'submitted') {
+        // For "ready" tab
+        show = status === 'ready';
+      } else if (filter === 'completed') {
+        show = status === 'completed';
+      }
+      
+      card.style.display = show ? 'block' : 'none';
+      if (show) visibleCount++;
     });
+    
+    // Show/hide "no requests" message
+    if (noRequestsMsg) {
+      noRequestsMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+  });
+});
   </script>
 </body>
 </html>
