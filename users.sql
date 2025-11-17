@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 27, 2025 at 04:47 AM
+-- Generation Time: Nov 17, 2025 at 09:10 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -29,21 +29,71 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `account` (
   `id` int(11) NOT NULL,
-  `email` varchar(55) NOT NULL,
-  `password` varchar(55) NOT NULL,
-  `barangay` varchar(55) NOT NULL,
-  `file_path` varchar(255) NOT NULL
+  `usertype` varchar(55) NOT NULL DEFAULT '',
+  `first_name` varchar(100) NOT NULL,
+  `middle_name` varchar(100) DEFAULT NULL,
+  `last_name` varchar(100) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `barangay` varchar(100) NOT NULL,
+  `id_type` varchar(100) DEFAULT NULL,
+  `resident_type` varchar(50) DEFAULT NULL,
+  `file_path` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `account`
 --
 
-INSERT INTO `account` (`id`, `email`, `password`, `barangay`, `file_path`) VALUES
-(1, 'shou@gmail.com', '$2y$10$iwU.6taH17wjTPRv.nShQ..1AP2IZKVqGa.0iRvVKlMZhp.t', 'Barangay Sangandaan', 'uploads/Warframe0000.jpg'),
-(2, 'kel@gmail.com', '$2y$10$I22mbRuD4LRyY66bAib3lelxXuqdsSlolarP9yN3Y.m7MuMU', 'Barangay Sangandaan', 'uploads/Warframe0000.jpg'),
-(3, 'steve@gmail.com', 'mir4', 'Barangay Sangandaan', 'uploads/Warframe0000.jpg'),
-(4, 'airam@gmail.com', 'ram', 'Barangay Sangandaan', 'uploads/Warframe0000.jpg');
+INSERT INTO `account` (`id`, `usertype`, `first_name`, `middle_name`, `last_name`, `email`, `password`, `barangay`, `id_type`, `resident_type`, `file_path`, `created_at`, `updated_at`) VALUES
+(1, 'admin', 'Admin', 'Test', 'User', 'admin@gov.qc.ph', 'admin123', 'Barangay 170', 'government-id', 'resident', 'uploads/default.jpg', '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
+(2, '', 'John', 'Dela', 'Cruz', 'john@gmail.com', 'password123', 'Barangay 170', 'government-id', 'resident', 'uploads/john_id.jpg', '2025-01-15 00:00:00', '2025-01-15 00:00:00'),
+(3, '', 'Shou', 'Nicol', 'Ballesteros', 'shou123@gmail.com', '$2y$10$rCNGrLpDHGkxF1ENU/S/0e9j5h9.pjlIyGS9Lu464wF/DxpSA/NB2', 'Sangandaan', 'passport', 'resident', 'uploads/6918b4726a53c_1763226738.png', '2025-11-15 17:12:18', '2025-11-15 17:12:18'),
+(4, '', 'Tyron', 'Pongay', 'Chavez', 'tyron123@gmail.com', 'juday123', 'Sangandaan', 'pwd-id', 'resident', 'uploads/6918b520bef2b_1763226912.png', '2025-11-15 17:15:12', '2025-11-15 17:15:12'),
+(5, '', 'Airam', 'Jesse', 'Licero', 'airam@gmail.com', 'airam123', 'Bahay Toro', 'philhealth-id', 'resident', 'uploads/6919f4f7a0458_1763308791.png', '2025-11-16 15:59:51', '2025-11-16 15:59:51');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `id` int(11) NOT NULL,
+  `type` enum('NEWS','EVENT') NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `date` varchar(100) NOT NULL,
+  `description` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`id`, `type`, `title`, `date`, `description`, `created_at`, `updated_at`) VALUES
+(1, 'NEWS', 'Free Medical Check-up', 'November 18, 2025', 'The barangay health center will conduct free medical check-ups for all residents this coming weekend.', '2025-11-16 15:39:03', '2025-11-16 15:39:03'),
+(2, 'EVENT', 'Health and Wellness Seminar', 'November 20, 2025', 'Join us for an informative seminar about nutrition and healthy living. Open to all barangay residents.', '2025-11-16 15:39:03', '2025-11-16 15:39:03'),
+(5, 'NEWS', 'ml', 'November 25, 2025', 'jjjjjaaayy', '2025-11-16 15:45:47', '2025-11-16 15:45:47'),
+(6, 'NEWS', 'dota', 'December 29, 2025', 'rarara', '2025-11-16 15:49:08', '2025-11-16 15:49:08');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `password_resets`
+--
+
+CREATE TABLE `password_resets` (
+  `id` int(11) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `otp` varchar(6) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `expires_at` timestamp NOT NULL DEFAULT (current_timestamp() + interval 15 minute),
+  `used` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -56,21 +106,40 @@ CREATE TABLE `requests` (
   `ticket_id` varchar(20) NOT NULL,
   `user_id` int(11) NOT NULL,
   `fullname` varchar(255) NOT NULL,
+  `priority` varchar(55) NOT NULL DEFAULT '',
   `contact` varchar(15) NOT NULL,
   `requesttype` varchar(50) NOT NULL,
   `description` text NOT NULL,
   `status` enum('PENDING','UNDER REVIEW','IN PROGRESS','READY','COMPLETED') DEFAULT 'PENDING',
-  `submitted_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `submitted_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `requests`
 --
 
-INSERT INTO `requests` (`id`, `ticket_id`, `user_id`, `fullname`, `contact`, `requesttype`, `description`, `status`, `submitted_at`) VALUES
-(1, 'BHR-2025-000001', 3, 'asdasd', '09123456789', 'ID', 'asdasdasd', 'PENDING', '2025-10-27 03:31:09'),
-(2, 'BHR-2025-000002', 3, 'michael', '09134567890', 'ID', 'inamo kel', 'PENDING', '2025-10-27 03:33:17'),
-(3, 'BHR-2025-000003', 4, 'airam licerio', '09124567891', 'No Objection', 'testing lang', 'PENDING', '2025-10-27 03:37:40');
+INSERT INTO `requests` (`id`, `ticket_id`, `user_id`, `fullname`, `priority`, `contact`, `requesttype`, `description`, `status`, `submitted_at`, `updated_at`) VALUES
+(6, 'BHR-2025-000001', 2, 'jhamir', '', '09167039130', 'ID', 'd', 'PENDING', '2025-11-16 12:18:49', '2025-11-16 12:18:49'),
+(7, 'BHR-2025-000002', 2, 'michael', '', '09167039130', 'Clearance', 'hahaha', 'PENDING', '2025-11-16 12:18:55', '2025-11-16 12:18:55'),
+(8, 'BHR-2025-000003', 2, 'airam licerio', '', '09167039130', 'indigency', 'dwdsadaw', 'PENDING', '2025-11-16 12:19:07', '2025-11-16 12:19:07'),
+(9, 'BHR-2025-000004', 2, 'john@gmail.com', '', 'N/A', 'Barangay Certificate of Household Membership', 'dwasd', 'IN PROGRESS', '2025-11-16 16:40:41', '2025-11-16 16:46:18'),
+(10, 'BHR-2025-000005', 2, 'john@gmail.com', '', '09167039130', 'Barangay Certificate of Household Membership', 'dawsd', 'PENDING', '2025-11-16 16:47:16', '2025-11-16 16:47:16');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `request_updates`
+--
+
+CREATE TABLE `request_updates` (
+  `id` int(11) NOT NULL,
+  `request_id` int(11) NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `message` text DEFAULT NULL,
+  `updated_by` varchar(255) DEFAULT 'Admin',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Indexes for dumped tables
@@ -81,14 +150,43 @@ INSERT INTO `requests` (`id`, `ticket_id`, `user_id`, `fullname`, `contact`, `re
 --
 ALTER TABLE `account`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD UNIQUE KEY `email` (`email`),
+  ADD KEY `idx_email` (`email`),
+  ADD KEY `idx_usertype` (`usertype`);
+
+--
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_type` (`type`),
+  ADD KEY `idx_created_at` (`created_at`);
+
+--
+-- Indexes for table `password_resets`
+--
+ALTER TABLE `password_resets`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_email` (`email`),
+  ADD KEY `idx_expires_at` (`expires_at`);
 
 --
 -- Indexes for table `requests`
 --
 ALTER TABLE `requests`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `ticket_id` (`ticket_id`);
+  ADD UNIQUE KEY `ticket_id` (`ticket_id`),
+  ADD KEY `idx_user_id` (`user_id`),
+  ADD KEY `idx_status` (`status`),
+  ADD KEY `idx_submitted_at` (`submitted_at`);
+
+--
+-- Indexes for table `request_updates`
+--
+ALTER TABLE `request_updates`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_request_id` (`request_id`),
+  ADD KEY `idx_created_at` (`created_at`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -98,13 +196,47 @@ ALTER TABLE `requests`
 -- AUTO_INCREMENT for table `account`
 --
 ALTER TABLE `account`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `password_resets`
+--
+ALTER TABLE `password_resets`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `requests`
 --
 ALTER TABLE `requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `request_updates`
+--
+ALTER TABLE `request_updates`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `requests`
+--
+ALTER TABLE `requests`
+  ADD CONSTRAINT `requests_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `account` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `request_updates`
+--
+ALTER TABLE `request_updates`
+  ADD CONSTRAINT `request_updates_ibfk_1` FOREIGN KEY (`request_id`) REFERENCES `requests` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
