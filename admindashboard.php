@@ -883,7 +883,7 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['is_admin'])) {
       </div>
       <div class="card">
         <h2 id="reviewCount" style="color: #F66D31;">0</h2>
-        <small>Under Review</small>
+        <small>Pending</small>
       </div>
       <div class="card">
         <h2 id="progressCount" style="color: #E27508;">0</h2>
@@ -1198,7 +1198,7 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['is_admin'])) {
   function updateDashboard(reqs) {
     const counts = {
       total: reqs.length,
-      review: reqs.filter(r => r.status.toLowerCase() === "under review" || r.status.toLowerCase() === "pending").length,
+      review: reqs.filter(r => r.status.toLowerCase() === "pending" || r.status.toLowerCase() === "pending").length,
       progress: reqs.filter(r => r.status.toLowerCase() === "in progress").length,
       ready: reqs.filter(r => r.status.toLowerCase() === "ready").length,
       completed: reqs.filter(r => r.status.toLowerCase() === "completed").length,
