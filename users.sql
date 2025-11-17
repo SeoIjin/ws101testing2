@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 17, 2025 at 09:10 PM
+-- Generation Time: Nov 17, 2025 at 09:38 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -78,7 +78,8 @@ INSERT INTO `notifications` (`id`, `type`, `title`, `date`, `description`, `crea
 (1, 'NEWS', 'Free Medical Check-up', 'November 18, 2025', 'The barangay health center will conduct free medical check-ups for all residents this coming weekend.', '2025-11-16 15:39:03', '2025-11-16 15:39:03'),
 (2, 'EVENT', 'Health and Wellness Seminar', 'November 20, 2025', 'Join us for an informative seminar about nutrition and healthy living. Open to all barangay residents.', '2025-11-16 15:39:03', '2025-11-16 15:39:03'),
 (5, 'NEWS', 'ml', 'November 25, 2025', 'jjjjjaaayy', '2025-11-16 15:45:47', '2025-11-16 15:45:47'),
-(6, 'NEWS', 'dota', 'December 29, 2025', 'rarara', '2025-11-16 15:49:08', '2025-11-16 15:49:08');
+(6, 'NEWS', 'dota', 'December 29, 2025', 'rarara', '2025-11-16 15:49:08', '2025-11-16 15:49:08'),
+(8, 'NEWS', 'test', 'test', 'test', '2025-11-17 20:27:40', '2025-11-17 20:27:40');
 
 -- --------------------------------------------------------
 
@@ -120,11 +121,11 @@ CREATE TABLE `requests` (
 --
 
 INSERT INTO `requests` (`id`, `ticket_id`, `user_id`, `fullname`, `priority`, `contact`, `requesttype`, `description`, `status`, `submitted_at`, `updated_at`) VALUES
-(6, 'BHR-2025-000001', 2, 'jhamir', '', '09167039130', 'ID', 'd', 'PENDING', '2025-11-16 12:18:49', '2025-11-16 12:18:49'),
-(7, 'BHR-2025-000002', 2, 'michael', '', '09167039130', 'Clearance', 'hahaha', 'PENDING', '2025-11-16 12:18:55', '2025-11-16 12:18:55'),
-(8, 'BHR-2025-000003', 2, 'airam licerio', '', '09167039130', 'indigency', 'dwdsadaw', 'PENDING', '2025-11-16 12:19:07', '2025-11-16 12:19:07'),
-(9, 'BHR-2025-000004', 2, 'john@gmail.com', '', 'N/A', 'Barangay Certificate of Household Membership', 'dwasd', 'IN PROGRESS', '2025-11-16 16:40:41', '2025-11-16 16:46:18'),
-(10, 'BHR-2025-000005', 2, 'john@gmail.com', '', '09167039130', 'Barangay Certificate of Household Membership', 'dawsd', 'PENDING', '2025-11-16 16:47:16', '2025-11-16 16:47:16');
+(7, 'BHR-2025-000002', 2, 'michael', '', '09167039130', 'Clearance', 'hahaha', 'COMPLETED', '2025-11-16 12:18:55', '2025-11-17 20:25:40'),
+(8, 'BHR-2025-000003', 2, 'airam licerio', '', '09167039130', 'indigency', 'dwdsadaw', 'IN PROGRESS', '2025-11-16 12:19:07', '2025-11-17 20:25:24'),
+(9, 'BHR-2025-000004', 2, 'john@gmail.com', '', 'N/A', 'Barangay Certificate of Household Membership', 'dwasd', 'READY', '2025-11-16 16:40:41', '2025-11-17 20:36:48'),
+(13, 'BHR-2025-000005', 2, 'john@gmail.com', '', '09167039130', 'Barangay Clearance', 'haha', 'PENDING', '2025-11-17 20:33:56', '2025-11-17 20:33:56'),
+(14, 'BHR-2025-000006', 2, 'john@gmail.com', '', '09167039130', 'Barangay Construction / Renovation Permit', 'test', 'PENDING', '2025-11-17 20:34:10', '2025-11-17 20:34:10');
 
 -- --------------------------------------------------------
 
@@ -202,7 +203,7 @@ ALTER TABLE `account`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `password_resets`
@@ -214,7 +215,7 @@ ALTER TABLE `password_resets`
 -- AUTO_INCREMENT for table `requests`
 --
 ALTER TABLE `requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `request_updates`
