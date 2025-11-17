@@ -57,10 +57,7 @@ while ($row = $result->fetch_assoc()) {
     // Map status to display format
     switch ($status) {
         case 'PENDING':
-            $row['status'] = 'Under Review';
-            break;
-        case 'UNDER REVIEW':
-            $row['status'] = 'Under Review';
+            $row['status'] = 'Pending';
             break;
         case 'IN PROGRESS':
             $row['status'] = 'In Progress';
