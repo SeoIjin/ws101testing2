@@ -41,14 +41,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['logout'])) {
         $error = "Please enter a valid contact number (10-11 digits).";
     } else {
         // Generate unique ticket ID
-        $year = date('Y');
-        $stmt = $conn->prepare("SELECT COUNT(*) FROM requests WHERE YEAR(submitted_at) = ?");
-        $stmt->bind_param("i", $year);
-        $stmt->execute();
-        $stmt->bind_result($count);
-        $stmt->fetch();
-        $stmt->close();
-        $ticket_id = 'BHR-' . $year . '-' . str_pad($count + 1, 6, '0', STR_PAD_LEFT);
+$year = date('Y');
+
+// Get the highest ticket number for this year
+$stmt = $conn->prepare("SELECT ticket_id FROM requests WHERE YEAR(submitted_at) = ? ORDER BY id DESC LIMIT 1");
+$stmt->bind_param("i", $year);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $last_ticket = $row['ticket_id'];
+    // Extract the number part (e.g., "BHR-2025-000004" -> "000004")
+    $last_number = intval(substr($last_ticket, -6));
+    $next_number = $last_number + 1;
+} else {
+    // No tickets for this year yet, start from 1
+    $next_number = 1;
+}
+
+$ticket_id = 'BHR-' . $year . '-' . str_pad($next_number, 6, '0', STR_PAD_LEFT);
+$stmt->close();
+
+// Double-check if ticket_id exists (safety measure)
+$check_stmt = $conn->prepare("SELECT id FROM requests WHERE ticket_id = ?");
+$check_stmt->bind_param("s", $ticket_id);
+$check_stmt->execute();
+$check_result = $check_stmt->get_result();
+
+// If ticket exists, keep incrementing until we find a unique one
+while ($check_result->num_rows > 0) {
+    $next_number++;
+    $ticket_id = 'BHR-' . $year . '-' . str_pad($next_number, 6, '0', STR_PAD_LEFT);
+    $check_stmt->bind_param("s", $ticket_id);
+    $check_stmt->execute();
+    $check_result = $check_stmt->get_result();
+}
+$check_stmt->close();
 
         // Get user email for the name field
         $stmt = $conn->prepare("SELECT email FROM account WHERE id = ?");
